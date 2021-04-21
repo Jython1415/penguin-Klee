@@ -16,7 +16,7 @@ bool chassis_tank_drive = true;
 // speed multiplier
 double chassis_speed_multiplier = 0.8;
 
-// controler variables
+// controler variables for funsies
 int axis1;
 int axis2;
 int axis3;
