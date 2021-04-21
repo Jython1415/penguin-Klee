@@ -426,3 +426,92 @@ void route_2 ()
 
   route_p2_v2();
 }
+
+// --------------------------
+
+using namespace vex;
+
+float power;
+
+void forward (float target, bool intake = true) {
+  do {
+    power = target - chassisRF.rotation(rotationUnits::raw);
+    if (power >= 100) {
+      power = 100;
+    }
+    chassisL_set(power);
+    chassisR_set(power);
+    if (intake) {
+      intake_set(100);
+      rollerT_set(100);
+    }
+  } while (chassisRF.rotation(rotationUnits::raw) < target);
+  chassis_stop();
+  intake_set();
+}
+
+void backward (float target, bool intake = true) {
+  do {
+    power = target - chassisRF.rotation(rotationUnits::raw);
+    if (power <= 100) {
+      power = 100;
+    }
+    chassisL_set(-power);
+    chassisR_set(-power);
+    if (intake) {
+      intake_set(100);
+      rollerT_set(100);
+    }
+  } while (chassisRF.rotation(rotationUnits::raw) < target);
+  chassis_stop();
+  intake_set();
+  rollerT_set();
+}
+
+void turn_right (float target, bool intake = true) {
+  do {
+    power = target - chassisRF.rotation(rotationUnits::raw);
+    if (power >= 100) {
+      power = 100;
+    }
+    chassisL_set(-power);
+    chassisR_set(power);
+    if (intake) {
+      intake_set(100);
+      rollerT_set(100);
+    }
+  } while (chassisRF.rotation(rotationUnits::raw) < target);
+  chassis_stop();
+  intake_set();
+  rollerT_set();
+}
+
+void turn_left (float target, bool intake = true) {
+  do {
+    power = target - chassisRF.rotation(rotationUnits::raw);
+    if (power <= 100) {
+      power = 100;
+    }
+    chassisL_set(power);
+    chassisR_set(-power);
+    if (intake) {
+      intake_set(100);
+      rollerT_set(100);
+    }
+  } while (chassisRF.rotation(rotationUnits::raw) < target);
+  chassis_stop();
+  intake_set();
+  rollerT_set();
+}
+
+void cycle (int time) {
+  intake_set(100);
+  roller_set(100);
+  task::sleep(time);
+  intake_set();
+  roller_set();
+}
+
+void route_3 () {
+  
+}
