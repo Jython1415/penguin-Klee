@@ -1,3 +1,6 @@
+#ifndef _VEX_H_
+#define _VEX_H_
+
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       vex.h                                                     */
@@ -24,3 +27,5 @@
 
 #define repeat(iterations)                                                     \
   for (int iterator = 0; iterator < iterations; iterator++)
+
+#endif
