@@ -18,6 +18,7 @@ void speed_multiplier_update()
   chassis_speed_multiplier = ctlr1.ButtonUp.pressing() ? 0.8 : ctlr1.ButtonDown.pressing() ? 0.4 : 1.0;
 }
 
+// tank drive with 1 macro
 void tank_drive()
 {
   // basic tank drive
@@ -41,9 +42,10 @@ void tank_drive()
   }
 }
 
-   
-    // intake control
-    if (ctlr1.ButtonL1.pressing())
+// basic intake control
+void intake_control()
+{
+  if (ctlr1.ButtonL1.pressing())
     {
       intake_set(100);
     }
@@ -55,27 +57,29 @@ void tank_drive()
     {
       intake_set(0);
     }
+}
 
-    // roller control
-    if (!ctlr1.ButtonX.pressing())
+// basic roller control
+void roller_control()
+{
+  // roller control
+  if (!ctlr1.ButtonX.pressing())
+  {
+    if (ctlr1.ButtonR1.pressing())
     {
-      if (ctlr1.ButtonR1.pressing())
-      {
-        roller_set(100);
-      }
-      else if (ctlr1.ButtonR2.pressing())
-      {
-        roller_set(-100);
-      }
-      else
-      {
-        roller_set(0);
-      }
+      roller_set(100);
+    }
+    else if (ctlr1.ButtonR2.pressing())
+    {
+      roller_set(-100);
     }
     else
     {
-      roller_set(80);
+      roller_set(0);
     }
-
-    task::sleep(20);
-  
+  }
+  else
+  {
+    roller_set(80);
+  }
+}
