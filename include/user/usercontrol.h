@@ -1,6 +1,18 @@
 #ifndef _USERCONTROL_H_
 #define _USERCONTROL_H_
 
+// linear mapping constants
+extern int linear_b_threshold; // linear bottom threshold
+
+// curve mapping constants
+extern const bool curve_is_on; // on and off for curved controller mapping
+extern const double c_exponent;
+extern const int c_lower_dz; // lower dead zone; dead zone being the part of the joystick range that has no effect
+extern const int c_upper_dz; // upper dead zone
+extern const int c_lowest_pwr; // lowest power output
+extern const double c_multiplier; // derived using desmos.com/calculator/rzxfys8ctn -- a calculator I developed for this purpose
+int c_equation (int axis_input);
+
 // speed multiplier
 extern double chassis_speed_multiplier;
 
