@@ -1,40 +1,47 @@
-// drive selection
-bool chassis_tank_drive = true;
+#include "vex.h"
+#include "robot-config.h"
+#include "motors.h"
+#include "user/controller.h"
+
+// linear mapping constants
+int linear_b_threshold = 15; // linear bottom threshold
 
 // speed multiplier
-double chassis_speed_multiplier = 0.8;
-
-
+double chassis_speed_multiplier = 1.0;
 
 // speed multiplier control
-    chassis_speed_multiplier = ctlr1.ButtonUp.pressing() ? 0.8 : ctlr1.ButtonDown.pressing() ? 0.4 : 1.0;
+void speed_multiplier_update()
+{
+  // default is 1.0
+  // button up is 0.8
+  // botton down is 0.4
+  chassis_speed_multiplier = ctlr1.ButtonUp.pressing() ? 0.8 : ctlr1.ButtonDown.pressing() ? 0.4 : 1.0;
+}
 
-    // chassis control
-    if (chassis_tank_drive)
-    {
-      // basic tank drive
-      if (!ctlr1.ButtonX.pressing())
-      {
-        int chassis_left_power = abs(axis3) > 10 ? axis3 : 0;
-        chassis_left_power *= chassis_speed_multiplier;
-        int chassis_right_power = abs(axis2) > 20 ? axis2 : 0;
-        chassis_right_power *= chassis_speed_multiplier;
+void tank_drive()
+{
+  // basic tank drive
+  if (!ctlr1.ButtonX.pressing()) // normal input
+  {
+    // assign power with threshold
+    int chassis_left_power = abs(axis3) > linear_b_threshold /* threshold check */ ? axis3 : 0;
+    // multiply by speed multiplier
+    chassis_left_power *= chassis_speed_multiplier;
 
-        chassisL_set(chassis_left_power);
-        chassisR_set(chassis_right_power);
-      }
-      else // when button B is pressed
-      {
-        chassisL_set(-60);
-        chassisR_set(-60);
-      }
-    }
-    else
-    {
-      // basic arcade control
-      chassisL_set((axis2 + axis1) * chassis_speed_multiplier);
-      chassisR_set((axis2 - axis1) * chassis_speed_multiplier);
-    }
+    int chassis_right_power = abs(axis2) > linear_b_threshold ? axis2 : 0;
+    chassis_right_power *= chassis_speed_multiplier;
+
+    chassisL_set(chassis_left_power);
+    chassisR_set(chassis_right_power);
+  }
+  else // when button B is pressed; a macro
+  {
+    chassisL_set(-60);
+    chassisR_set(-60);
+  }
+}
+
+   
     // intake control
     if (ctlr1.ButtonL1.pressing())
     {
