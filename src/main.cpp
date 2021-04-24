@@ -4,6 +4,8 @@
 #include "vex.h"
 #include "auton/routes.h"
 #include "motors.h"
+#include "user/usercontrol.h"
+#include "user/controller.h"
 
 using namespace vex;
 
@@ -25,6 +27,15 @@ void usercontrol(void)
 {
   while (true)
   {
+    controller_variables_update();
+
+    speed_multiplier_update();
+
+    tank_drive();
+    intake_control();
+    roller_control();
+
+    task::sleep(20);
   }
 }
 
