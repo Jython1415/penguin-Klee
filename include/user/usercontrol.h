@@ -13,6 +13,7 @@ extern int c_lowest_pwr; // lowest power output
 // derived using desmos.com/calculator/rzxfys8ctn -- a calculator I developed for this purpose
 extern double c_multiplier;
 int c_equation (int axis_input);
+void c_mapping_initialize();
 
 // speed multiplier
 extern double chassis_speed_multiplier;
