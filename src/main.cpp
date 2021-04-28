@@ -25,6 +25,19 @@ void autonomous(void)
 
 void usercontrol(void)
 {
+  c_multiplier = (100 - c_lowest_pwr) / pow(127 - (c_upper_dz + c_lower_dz), c_exponent);
+  std::cout << c_multiplier << std::endl;
+
+  int graph[255];
+
+  for (int i = 0; i < 255; i++) {
+    graph[i] = c_equation(i - 127);
+  }
+
+  for (int i = 0; i < 255; i++) {
+    std::cout << int(i - 127) << " " << graph[i] << std::endl;
+  }
+
   while (true)
   {
     controller_variables_update();
