@@ -432,77 +432,92 @@ void route_2 ()
 using namespace vex;
 
 float power;
+float temp;
 
-void forward (float target, bool intake = true) {
+void forward_ (float target, bool intake = true) {
+  target -= 100;
+  power = 80;
   do {
+    temp = power;
     power = target - chassisRF.rotation(rotationUnits::raw);
-    if (power >= 100) {
-      power = 100;
+    if (power >= 80) {
+      power = 80;
     }
     chassisL_set(power);
-    chassisR_set(power);
+    chassisR_set(temp);
     if (intake) {
       intake_set(100);
       rollerT_set(100);
     }
   } while (chassisRF.rotation(rotationUnits::raw) < target);
   chassis_stop();
-  intake_set();
+  intakeL.stop();
+  intakeR.stop();
 }
 
-void backward (float target, bool intake = true) {
+void backward_ (float target, bool intake = true) {
+  target += 100;
+  power = -80;
   do {
-    power = target - chassisRF.rotation(rotationUnits::raw);
-    if (power <= 100) {
-      power = 100;
+    temp = power;
+    power = target + chassisRF.rotation(rotationUnits::raw);
+    if (power <= -80) {
+      power = -80;
     }
-    chassisL_set(-power);
-    chassisR_set(-power);
+    chassisL_set(power);
+    chassisR_set(temp);
     if (intake) {
       intake_set(100);
       rollerT_set(100);
     }
-  } while (chassisRF.rotation(rotationUnits::raw) < target);
+  } while (chassisRF.rotation(rotationUnits::raw) > target);
   chassis_stop();
-  intake_set();
-  rollerT_set();
+  intakeL.stop();
+  intakeR.stop();
 }
 
 void turn_right (float target, bool intake = true) {
+  target -= 100;
+  power = 80;
   do {
+    temp = power;
     power = target - chassisRF.rotation(rotationUnits::raw);
-    if (power >= 100) {
-      power = 100;
+    if (power >= 80) {
+      power = 80;
     }
     chassisL_set(-power);
-    chassisR_set(power);
+    chassisR_set(temp);
     if (intake) {
       intake_set(100);
       rollerT_set(100);
     }
   } while (chassisRF.rotation(rotationUnits::raw) < target);
   chassis_stop();
-  intake_set();
-  rollerT_set();
+  intakeL.stop();
+  intakeR.stop();
 }
 
 void turn_left (float target, bool intake = true) {
+  target += 100;
+  power = -80;
   do {
-    power = target - chassisRF.rotation(rotationUnits::raw);
-    if (power <= 100) {
-      power = 100;
+    temp = power;
+    power = target + chassisRF.rotation(rotationUnits::raw);
+    if (power <= -80) {
+      power = -80;
     }
     chassisL_set(power);
-    chassisR_set(-power);
+    chassisR_set(-temp);
     if (intake) {
       intake_set(100);
       rollerT_set(100);
     }
-  } while (chassisRF.rotation(rotationUnits::raw) < target);
+  } while (chassisRF.rotation(rotationUnits::raw) > target);
   chassis_stop();
-  intake_set();
-  rollerT_set();
+  intakeL.stop();
+  intakeR.stop();
 }
+
 
 void cycle (int time) {
   intake_set(100);
