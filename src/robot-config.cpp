@@ -13,8 +13,8 @@ vex::motor chassisLB  = vex::motor(PORT9, false);
 vex::motor chassisRF = vex::motor(PORT5, false);
 vex::motor chassisRB = vex::motor(PORT8, true);
 
-vex::motor intakeL = vex::motor(PORT20, false);
-vex::motor intakeR = vex::motor(PORT7, true);
+vex::motor intakeL = vex::motor(PORT20, true);
+vex::motor intakeR = vex::motor(PORT7, false);
 
 vex::motor rollerT = vex::motor(PORT14, false);
 vex::motor rollerB = vex::motor(PORT16, true);
