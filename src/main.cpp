@@ -6,6 +6,7 @@
 #include "motors.h"
 #include "user/usercontrol.h"
 #include "user/controller.h"
+#include "user/controller-mapping.h"
 
 using namespace vex;
 
