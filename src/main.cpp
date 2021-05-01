@@ -26,6 +26,8 @@ void autonomous(void)
 
 void usercontrol(void)
 {
+  c_mapping_initialize();
+
   while (true)
   {
     controller_variables_update();
