@@ -432,86 +432,152 @@ void route_2 ()
 using namespace vex;
 
 float power;
+float temp;
 
-void forward (float target, bool intake = true) {
-  do {
+void forward_ (float target, bool intake = true) {
+  target -= 100;
+  power = 50;
+  while (chassisRF.rotation(rotationUnits::raw) < target) {
     power = target - chassisRF.rotation(rotationUnits::raw);
-    if (power >= 100) {
-      power = 100;
+    if (power >= 50) {
+      power = 50;
     }
     chassisL_set(power);
     chassisR_set(power);
     if (intake) {
       intake_set(100);
-      rollerT_set(100);
     }
-  } while (chassisRF.rotation(rotationUnits::raw) < target);
+  }  
   chassis_stop();
-  intake_set();
+  intakeL.stop();
+  intakeR.stop();
+  rollerT.stop();
+  rollerB.stop();
 }
 
-void backward (float target, bool intake = true) {
+void backward_ (float target, bool intake = true) {
+  target += 100;
+  power = -50;
+  temp = -50;
   do {
-    power = target - chassisRF.rotation(rotationUnits::raw);
-    if (power <= 100) {
-      power = 100;
+    temp = power;
+    power = target + chassisRF.rotation(rotationUnits::raw);
+    if (power <= -50) {
+      power = -50;
     }
-    chassisL_set(-power);
-    chassisR_set(-power);
+    chassisL_set(power);
+    chassisR_set(temp);
     if (intake) {
       intake_set(100);
-      rollerT_set(100);
     }
-  } while (chassisRF.rotation(rotationUnits::raw) < target);
+  } while (chassisRF.rotation(rotationUnits::raw) > target);
   chassis_stop();
-  intake_set();
-  rollerT_set();
-}
-
-void turn_right (float target, bool intake = true) {
-  do {
-    power = target - chassisRF.rotation(rotationUnits::raw);
-    if (power >= 100) {
-      power = 100;
-    }
-    chassisL_set(-power);
-    chassisR_set(power);
-    if (intake) {
-      intake_set(100);
-      rollerT_set(100);
-    }
-  } while (chassisRF.rotation(rotationUnits::raw) < target);
-  chassis_stop();
-  intake_set();
-  rollerT_set();
+  intakeL.stop();
+  intakeR.stop();
 }
 
 void turn_left (float target, bool intake = true) {
+  target -= 200;
+  power = 50;
+  temp = 50;
   do {
+    temp = power;
     power = target - chassisRF.rotation(rotationUnits::raw);
-    if (power <= 100) {
-      power = 100;
+    if (power >= 50) {
+      power = 50;
     }
-    chassisL_set(power);
-    chassisR_set(-power);
+    chassisL_set(-power);
+    chassisR_set(temp);
     if (intake) {
       intake_set(100);
-      rollerT_set(100);
     }
   } while (chassisRF.rotation(rotationUnits::raw) < target);
   chassis_stop();
-  intake_set();
-  rollerT_set();
+  intakeL.stop();
+  intakeR.stop();
 }
 
-void cycle (int time) {
-  intake_set(100);
-  roller_set(100);
-  task::sleep(time);
-  intake_set();
-  roller_set();
+void turn_right (float target) {
+  target -= 200;
+  power = -50;
+  temp = -50;
+  do {
+    temp = power;
+    power = -target + chassisRF.rotation(rotationUnits::raw);
+    if (power <= -50) {
+      power = -50;
+    }
+    chassisL_set(-power);
+    chassisR_set(temp);
+  } while (chassisRF.rotation(rotationUnits::raw) > -target);
+  chassis_stop();
+  intakeL.stop();
+  intakeR.stop();
+}
+
+void turn_right (float target, bool intake = true) {
+  target -= 200;
+  power = -50;
+  temp = -50;
+  do {
+    temp = power;
+    power = -target + chassisRF.rotation(rotationUnits::raw);
+    if (power <= -50) {
+      power = -50;
+    }
+    chassisL_set(-power);
+    chassisR_set(temp);
+    if (intake) {
+      intake_set(100);
+    }
+    else if (!intake) {
+      intake_set(-100);
+      rollerB_set(-100);
+    }
+  } while (chassisRF.rotation(rotationUnits::raw) > -target);
+  chassis_stop();
+  intakeL.stop();
+  intakeR.stop();
+}
+
+
+void cycle (int time, int power) {
+  roller_set(power);
+  task::sleep(200);
+  intake_set(power);
+  roller_set(power);
+  task::sleep(time - 150);
+  rollerB.setBrake(brakeType::brake);
+  rollerT.setBrake(brakeType::brake);
+  rollerB.stop();
+  rollerT.stop();
+  task::sleep(150);
+  intakeL.setBrake(brakeType::brake);
+  intakeR.setBrake(brakeType::brake);
+  intakeL.stop();
+  intakeR.stop();
 }
 
 void route_3 () {
-  
+  cycle(400, 100);
+  forward_(1700);
+  chassis_reset();
+  task::sleep(100);
+  turn_left(600);
+  chassis_reset();
+  task::sleep(200);
+  forward_(2200);
+  cycle(600, 100);
+  chassis_reset();
+  backward_(-800, false);
+  task::sleep(100);
+  turn_right(1200, false);
+}
+
+void route_4 () {
+  cycle(400, 100);
+  forward_(1700);
+  task::sleep(100);
+  turn_left(2244);
+  task::sleep(200);
 }

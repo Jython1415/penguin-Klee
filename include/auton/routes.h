@@ -27,5 +27,7 @@ void route_p2_v2 ();
 
 void route_1 () ;
 void route_2 () ;
+void route_3 () ;
+void route_4 () ;
 
 #endif
