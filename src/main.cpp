@@ -7,6 +7,7 @@
 #include "motors.h"
 #include "user/usercontrol.h"
 #include "user/controller.h"
+#include "user/controller-mapping.h"
 
 using namespace vex;
 
@@ -27,6 +28,7 @@ void autonomous(void)
 void usercontrol(void)
 {
   c_mapping_initialize();
+  c_mapping_print_map();
 
   while (true)
   {
