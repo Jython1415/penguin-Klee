@@ -27,6 +27,7 @@ void autonomous(void)
 void usercontrol(void)
 {
   c_mapping_initialize();
+  c_mapping_print_map();
 
   while (true)
   {
