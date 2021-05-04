@@ -3,6 +3,7 @@
 
 #include "vex.h"
 #include "auton/routes.h"
+#include "auton/screen.h"
 #include "motors.h"
 #include "user/usercontrol.h"
 #include "user/controller.h"
@@ -53,6 +54,7 @@ int main() {
 
   // Prevent main from exiting with an infinite loop.
   while (true) {
+    print_rotation();
     wait(100, msec);
   }
 }
