@@ -15,4 +15,6 @@ int c_equation (int axis_input);
 
 void c_mapping_initialize();
 
+void c_mapping_print_map();
+
 #endif

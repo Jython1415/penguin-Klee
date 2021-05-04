@@ -1,3 +1,5 @@
+#include "vex.h"
+
 // curve mapping constants
 bool curve_is_on = 1; // on and off for curved controller mapping
 double c_exponent = 2.0;
@@ -18,3 +20,19 @@ int c_equation (int axis_input)
 
 // initiaizing the mapping constant
 void c_mapping_initialize() { c_multiplier = (100 - c_lowest_pwr) / pow(127 - (c_upper_dz + c_lower_dz), c_exponent); }
+
+void c_mapping_print_map()
+{
+  // array for mapping
+  int c_map[255];
+
+  // add values to the array
+  for (int i = 0; i < 255; i++) {
+    c_map[i] = c_equation(i - 127);
+  }
+
+  // print the array
+  for (int i = 0; i < 255; i++) {
+    std::cout << i - 127 << ", " << c_map[i] << std::endl; // prints: axis, power
+  }
+}
