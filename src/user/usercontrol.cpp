@@ -34,8 +34,8 @@ void tank_drive()
 
     if (curve_is_on) // if curved power is on
     {
-      chassis_lp = c_equation(axis3);
-      chassis_rp = c_equation(axis2);
+      chassis_lp = c_map(axis3);
+      chassis_rp = c_map(axis2);
     }
     else // linear control
     {
