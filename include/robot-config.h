@@ -1,20 +1,22 @@
 #ifndef _ROBOT_CONFIG_H_
 #define _ROBOT_CONFIG_H_
 
-extern vex::brain Brain;
+using namespace vex;
 
-extern vex::controller ctlr1;
+extern brain Brain;
 
-extern vex::motor chassisLF;
-extern vex::motor chassisLB;
-extern vex::motor chassisRF;
-extern vex::motor chassisRB;
+extern controller ctlr1;
 
-extern vex::motor intakeL;
-extern vex::motor intakeR;
+extern motor chassisLF;
+extern motor chassisLB;
+extern motor chassisRF;
+extern motor chassisRB;
 
-extern vex::motor rollerT;
-extern vex::motor rollerB;
+extern motor intakeL;
+extern motor intakeR;
+
+extern motor rollerT;
+extern motor rollerB;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
