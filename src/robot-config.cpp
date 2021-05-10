@@ -3,21 +3,39 @@
 using namespace vex;
 
 // A global instance of brain used for printing to the V5 brain screen
-vex::brain Brain;
+brain Brain;
 
-vex::controller ctlr1;
+controller ctlr1;
 
-// main bot
-vex::motor chassisLF  = vex::motor(PORT1, true);
-vex::motor chassisLB  = vex::motor(PORT9, false);
-vex::motor chassisRF = vex::motor(PORT5, false);
-vex::motor chassisRB = vex::motor(PORT8, true);
+#ifdef C_TEAM_BOT // C
 
-vex::motor intakeL = vex::motor(PORT20, true);
-vex::motor intakeR = vex::motor(PORT7, false);
+motor chassisLF = motor(PORT1, true);
+motor chassisLB = motor(PORT9, false);
+motor chassisRF = motor(PORT5, false);
+motor chassisRB = motor(PORT8, true);
 
-vex::motor rollerT = vex::motor(PORT14, false);
-vex::motor rollerB = vex::motor(PORT16, true);
+motor intakeL = motor(PORT20, true);
+motor intakeR = motor(PORT7, false);
+
+motor rollerT = motor(PORT14, false);
+motor rollerB = motor(PORT16, true);
+
+#else // A
+
+motor chassisRF = motor(PORT11, false);
+motor chassisRB = motor(PORT1,  true);
+motor chassisLF = motor(PORT19, true);
+motor chassisLB = motor(PORT12, false);
+
+// positive is intake, negative is outtake
+motor intakeR = motor(PORT16, true);
+motor intakeL = motor(PORT7, false);
+
+// positive is intake, negative is outtake
+motor rollerT = motor(PORT4, false);
+motor rollerB = motor(PORT6, false);
+
+#endif
 
 void vexcodeInit(void) {
 }

@@ -18,4 +18,8 @@ void intake_control();
 // basic roller control
 void roller_control();
 
+// a team functions
+void intake_control_a();
+void roller_control_a();
+
 #endif

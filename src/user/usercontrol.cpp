@@ -63,40 +63,65 @@ void tank_drive()
 void intake_control()
 {
   if (ctlr1.ButtonL1.pressing())
-    {
-      intake_set(100);
-    }
-    else if (ctlr1.ButtonL2.pressing())
-    {
-      intake_set(-100);
-    }
-    else
-    {
-      intake_set(0);
-    }
+  {
+    intake_set(100);
+  }
+  else if (ctlr1.ButtonL2.pressing())
+  {
+    intake_set(-100);
+  }
+  else
+  {
+    intake_set(0);
+  }
 }
 
 // basic roller control
 void roller_control()
 {
-  // roller control
-  if (!ctlr1.ButtonX.pressing())
+  if (ctlr1.ButtonR1.pressing())
   {
-    if (ctlr1.ButtonR1.pressing())
-    {
-      roller_set(100);
-    }
-    else if (ctlr1.ButtonR2.pressing())
-    {
-      roller_set(-100);
-    }
-    else
-    {
-      roller_set(0);
-    }
+    roller_set(100);
+  }
+  else if (ctlr1.ButtonR2.pressing())
+  {
+    roller_set(-100);
   }
   else
   {
-    roller_set(80);
+    roller_set(0);
+  }
+}
+
+// A usercontrol functions
+void intake_control_a()
+{
+  if (ctlr1.ButtonR1.pressing())
+  {
+    intake_set(100);
+  }
+  else if (ctlr1.ButtonL1.pressing())
+  {
+    intake_set(-100);
+  }
+  else
+  {
+    intake_set(0);
+  }
+}
+
+void roller_control_a()
+{
+  if (ctlr1.ButtonR2.pressing())
+  {
+    roller_set(100);
+  }
+  else if (ctlr1.ButtonL2.pressing())
+  {
+    roller_set(-100);
+  }
+  else
+  {
+    roller_set(0);
   }
 }
