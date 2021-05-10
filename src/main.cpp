@@ -1,6 +1,3 @@
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// ---- END VEXCODE CONFIGURED DEVICES ----
-
 #include "vex.h"
 #include "auton/routes.h"
 #include "auton/screen.h"
@@ -8,6 +5,10 @@
 #include "user/usercontrol.h"
 #include "user/controller.h"
 #include "user/controller-mapping.h"
+
+#ifndef C_TEAM_BOT
+#define C_TEAM_BOT false
+#endif
 
 using namespace vex;
 
@@ -37,8 +38,17 @@ void usercontrol(void)
     speed_multiplier_update();
 
     tank_drive();
-    intake_control();
-    roller_control();
+    
+    if (C_TEAM_BOT)
+    {
+      intake_control();
+      roller_control();
+    }
+    else
+    {
+      intake_control_a();
+      roller_control_a();
+    }
 
     task::sleep(20);
   }
