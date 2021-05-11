@@ -1,13 +1,15 @@
 #include "vex.h"
 #include "robot-config.h"
 #include "motors.h"
+#include <cmath>
 
 using namespace vex;
 
 float power;
 float temp;
-const float default_value = 50; 
-const float FB_error = 60;
+float error;
+const float default_value = 40; 
+const float FB_error = 40;
 const float T_error = 70;
 
 void chassis_stop()
@@ -38,31 +40,19 @@ void forward_ (float target) {
     if (power >= default_value) {
       power = default_value;
     }
-    chassisL_set(power);
-    chassisR_set(power);
-  }  
-  chassis_stop();
-  intakeL.stop();
-  intakeR.stop();
-  rollerT.stop();
-  rollerB.stop();
-}
-
-void forward_ (float target, bool intake) {
-  target -= FB_error;
-  power = 50;
-  while (chassisRF.rotation(rotationUnits::raw) < target) {
-    power = target - chassisRF.rotation(rotationUnits::raw);
-    if (power >= 50) {
-      power = 50;
+    if (chassisLF.rotation(rotationUnits::raw) > chassisRF.rotation(rotationUnits::raw)) {
+      error = chassisLF.rotation(rotationUnits::raw) - chassisRF.rotation(rotationUnits::raw);
+      chassisL_set(power - error);
+      chassisR_set(power);
     }
-    chassisL_set(power);
-    chassisR_set(power);
-    if (intake) {
-      intake_set(100);
+    else if (chassisLF.rotation(rotationUnits::raw) < chassisRF.rotation(rotationUnits::raw)) {
+      error = chassisRF.rotation(rotationUnits::raw) - chassisLF.rotation(rotationUnits::raw);
+      chassisL_set(power);
+      chassisR_set(power - error);
     }
     else {
-      intake_set(-100);
+      chassisL_set(power);
+      chassisR_set(power);
     }
   }  
   chassis_stop();
@@ -74,44 +64,32 @@ void forward_ (float target, bool intake) {
 
 void backward_ (float target) {
   target += FB_error;
-  power = -default_value;
-  temp = -default_value;
-  do {
-    temp = power;
+  power = default_value;
+  while (chassisRF.rotation(rotationUnits::raw) > target) {
     power = target + chassisRF.rotation(rotationUnits::raw);
     if (power <= -default_value) {
       power = -default_value;
     }
-    chassisL_set(power);
-    chassisR_set(temp);
-  } while (chassisRF.rotation(rotationUnits::raw) > target);
-  chassis_stop();
-  intakeL.stop();
-  intakeR.stop();
-}
-
-void backward_ (float target, bool intake) {
-  target += FB_error;
-  power = -default_value;
-  temp = -default_value;
-  do {
-    temp = power;
-    power = target + chassisRF.rotation(rotationUnits::raw);
-    if (power <= -default_value) {
-      power = -default_value;
+    if (chassisLF.rotation(rotationUnits::raw) > chassisRF.rotation(rotationUnits::raw)) {
+      error = chassisLF.rotation(rotationUnits::raw) - chassisRF.rotation(rotationUnits::raw);
+      chassisL_set(power + error);
+      chassisR_set(power);
     }
-    chassisL_set(power);
-    chassisR_set(temp);
-    if (intake) {
-      intake_set(100);
+    else if (chassisLF.rotation(rotationUnits::raw) < chassisRF.rotation(rotationUnits::raw)) {
+      error = chassisRF.rotation(rotationUnits::raw) + chassisLF.rotation(rotationUnits::raw);
+      chassisL_set(power);
+      chassisR_set(power - error);
     }
     else {
-      intake_set(-100);
+      chassisL_set(power);
+      chassisR_set(power);
     }
-  } while (chassisRF.rotation(rotationUnits::raw) > target);
+  }  
   chassis_stop();
   intakeL.stop();
   intakeR.stop();
+  rollerT.stop();
+  rollerB.stop();
 }
 
 void turn_right (float target) {
@@ -126,30 +104,6 @@ void turn_right (float target) {
     }
     chassisL_set(-power);
     chassisR_set(temp);
-  } while (chassisRF.rotation(rotationUnits::raw) > target);
-  chassis_stop();
-  intakeL.stop();
-  intakeR.stop();
-}
-
-void turn_right (float target, bool intake) {
-  target -= T_error;
-  power = default_value;
-  temp = default_value;
-  do {
-    temp = power;
-    power = target - chassisRF.rotation(rotationUnits::raw);
-    if (power >= default_value) {
-      power = default_value;
-    }
-    chassisL_set(-power);
-    chassisR_set(temp);
-    if (intake) {
-      intake_set(100);
-    }
-    else {
-      intake_set(-100);
-    }
   } while (chassisRF.rotation(rotationUnits::raw) > target);
   chassis_stop();
   intakeL.stop();
@@ -174,32 +128,6 @@ void turn_left (float target) {
   intakeR.stop();
 }
 
-void turn_left (float target, bool intake) {
-  target -= T_error;
-  power = -default_value;
-  temp = -default_value;
-  do {
-    temp = power;
-    power = -target + chassisRF.rotation(rotationUnits::raw);
-    if (power <= -default_value) {
-      power = -default_value;
-    }
-    chassisL_set(-power);
-    chassisR_set(temp);
-    if (intake) {
-      intake_set(100);
-    }
-    else if (!intake) {
-      intake_set(-100);
-      rollerB_set(-100);
-    }
-  } while (chassisRF.rotation(rotationUnits::raw) < target);
-  chassis_stop();  
-  intakeL.stop();
-  intakeR.stop();
-}
-
-
 void cycle (int time, int power) {
   roller_set(power);
   task::sleep(200);
@@ -217,36 +145,14 @@ void cycle (int time, int power) {
   intakeR.stop();
 }
 
-void route_1 () {
-  cycle(400, 100);
-  forward_(1700);
-  chassis_reset();
-  task::sleep(100);
-  turn_left(600);
-  chassis_reset();
-  task::sleep(200);
-  forward_(2200);
-  cycle(600, 100);
-  chassis_reset();
-  backward_(-800, false);
-  task::sleep(100);
-  turn_right(1200, false);
+void intake_ (bool intake) {
+  if (intake) {
+    intake_set(100);
+  }
+  else {
+    intake_set(-100);
+  }
 }
-
-// forward +
-// backward -
-// right turn +
-// left turn -
-
-void route_2 () {
-  cycle(400, 100);
-  forward_(1600, true);
-  task::sleep(100);
-  turn_left(2000, true);
-  task::sleep(100);
-}
-
 void debug () {
-  turn_left(-1000);
-  turn_right(-1000);
+  forward_(1000);
 }

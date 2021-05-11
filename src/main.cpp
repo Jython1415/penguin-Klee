@@ -23,7 +23,7 @@ void pre_auton(void)
 
 void autonomous(void)
 {
-  route_2();
+  debug();
 }
 
 void usercontrol(void)
