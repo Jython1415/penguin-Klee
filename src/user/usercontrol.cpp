@@ -81,7 +81,8 @@ void roller_control()
 {
   if (ctlr1.ButtonR1.pressing())
   {
-    roller_set(100);
+    rollerB_set(100);
+    rollerT_set(80);
   }
   else if (ctlr1.ButtonR2.pressing())
   {
