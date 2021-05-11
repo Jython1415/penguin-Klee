@@ -63,4 +63,10 @@ void c_mapping_print_map()
     if (POI[i] != 0) { std::cout << ", " << c_map(POI[i] * -1); }
     std::cout << std::endl;
   }
+
+  // percentage print
+  // const int total_dz = c_lower_dz + c_upper_dz;
+  //const int f_unused = (total_dz / 127) * 100;
+  // float f_unused = 20 / 127;
+  // std::cout << round(20 / 127, 3) << "%" << std::endl;
 }
