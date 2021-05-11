@@ -49,8 +49,8 @@ void tank_drive()
     chassis_rp *= chassis_speed_multiplier;
 
     // set power
-    chassisL_set(chassis_lp);
-    chassisR_set(chassis_rp);
+    chassisL_set(chassis_lp * 0.75);
+    chassisR_set(chassis_rp* 0.75);
   }
   else // when button B is pressed; a macro
   {
