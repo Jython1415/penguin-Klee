@@ -8,6 +8,7 @@
 
 #ifndef C_TEAM_BOT
 #define C_TEAM_BOT false
+
 #endif
 
 using namespace vex;
