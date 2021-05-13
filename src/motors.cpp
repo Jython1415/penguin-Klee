@@ -3,67 +3,47 @@
 
 using namespace vex;
 
-void chassisLF_set(int input)
+void motor_set(motor name, int pwr = 0)
 {
-  chassisLF.spin(directionType::fwd, input, percentUnits::pct);
-}
-void chassisLB_set(int input)
-{
-  chassisLB.spin(directionType::fwd, input, percentUnits::pct);
-}
-void chassisRF_set(int input)
-{
-  chassisRF.spin(directionType::fwd, input, percentUnits::pct);
-}
-void chassisRB_set(int input)
-{
-  chassisRB.spin(directionType::fwd, input, percentUnits::pct);
-}
-void intakeL_set(int input)
-{
-  intakeL.spin(directionType::fwd, input, percentUnits::pct);
-}
-void intakeR_set(int input)
-{
-  intakeR.spin(directionType::fwd, input, percentUnits::pct);
-}
-void rollerT_set(int input)
-{
-  rollerT.spin(directionType::fwd, input, percentUnits::pct);
-}
-void rollerB_set(int input)
-{
-  rollerB.spin(directionType::fwd, input, percentUnits::pct);
+  name.spin(directionType::fwd, pwr, percentUnits::pct);
 }
 
-void chassisL_set(int input)
+void chassisL_set(int input = 0)
 {
-  chassisLF_set(input);
-  chassisLB_set(input);
+  motor_set(chassisLF, input);
+  motor_set(chassisLB, input);
 }
-void chassisR_set(int input)
+void chassisR_set(int input = 0)
 {
-  chassisRF_set(input);
-  chassisRB_set(input);
+  motor_set(chassisRF, input);
+  motor_set(chassisRB, input);
 }
-void chassis_set(int input)
+void chassis_set(int input = 0)
 {
   chassisL_set(input);
   chassisR_set(input);
 }
-void chassis_set_turn(int input)
+void chassis_set_turn(int input = 0)
 {
   chassisL_set(-input);
   chassisR_set(input);
 }
 
-void intake_set(int input)
+void intake_set(int input = 0)
 {
-  intakeL_set(input);
-  intakeR_set(input);
+  motor_set(intakeL, input);
+  motor_set(intakeR, input);
 }
 
-void roller_set(int input)
+void rollerT_set(int input = 0)
+{
+  motor_set(rollerT, input);
+}
+void rollerB_set(int input = 0)
+{
+  motor_set(rollerB, input);
+}
+void roller_set(int input = 0)
 {
   rollerT_set(input);
   rollerB_set(input);

@@ -1,15 +1,8 @@
 #ifndef _VEX_H_
 #define _VEX_H_
 
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/*    Module:       vex.h                                                     */
-/*    Author:       Vex Robotics                                              */
-/*    Created:      1 Feb 2019                                                */
-/*    Description:  Default header for V5 projects                            */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
-//
+// This file must be included in all files for this project
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +13,8 @@
 #include "v5_vcs.h"
 
 #include "robot-config.h"
+
+//#define C_TEAM_BOT true
 
 #define waitUntil(condition)                                                   \
   do {                                                                         \

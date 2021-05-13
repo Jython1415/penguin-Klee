@@ -2,27 +2,10 @@
 #include "robot-config.h"
 #include "motors.h"
 #include "user/controller.h"
+#include "user/controller-mapping.h"
 
 // linear mapping constants
 int linear_b_threshold = 15; // linear bottom threshold
-
-// curve mapping constants
-bool curve_is_on = 1; // on and off for curved controller mapping
-double c_exponent = 2.0;
-int c_lower_dz = 10; // lower dead zone; dead zone being the part of the joystick range that has no effect
-int c_upper_dz = 10; // upper dead zone
-int c_lowest_pwr = 3; // lowest power output
-// derived using desmos.com/calculator/rzxfys8ctn -- a calculator I developed for this purpose
-double c_multiplier = 0;
-// math for the mapping
-int c_equation (int axis_input)
-{
-  if (abs(axis_input) >= 127 - c_upper_dz) { return copysign(100, axis_input); }
-  else if (abs(axis_input) <= c_lower_dz) { return 0; }
-  else { return int(copysign(round(c_multiplier * pow(abs(axis_input) - c_lower_dz, c_exponent)) + c_lowest_pwr, axis_input)); }
-}
-// initiaizing the mapping constant
-void c_mapping_initialize() { c_multiplier = (100 - c_lowest_pwr) / pow(127 - (c_upper_dz + c_lower_dz), c_exponent); }
 
 // speed multiplier
 double chassis_speed_multiplier = 1.0;
@@ -51,8 +34,8 @@ void tank_drive()
 
     if (curve_is_on) // if curved power is on
     {
-      chassis_lp = c_equation(axis3);
-      chassis_rp = c_equation(axis2);
+      chassis_lp = c_map(axis3);
+      chassis_rp = c_map(axis2);
     }
     else // linear control
     {
@@ -80,40 +63,66 @@ void tank_drive()
 void intake_control()
 {
   if (ctlr1.ButtonL1.pressing())
-    {
-      intake_set(100);
-    }
-    else if (ctlr1.ButtonL2.pressing())
-    {
-      intake_set(-100);
-    }
-    else
-    {
-      intake_set(0);
-    }
+  {
+    intake_set(100);
+  }
+  else if (ctlr1.ButtonL2.pressing())
+  {
+    intake_set(-100);
+  }
+  else
+  {
+    intake_set(0);
+  }
 }
 
 // basic roller control
 void roller_control()
 {
-  // roller control
-  if (!ctlr1.ButtonX.pressing())
+  if (ctlr1.ButtonR1.pressing())
   {
-    if (ctlr1.ButtonR1.pressing())
-    {
-      roller_set(100);
-    }
-    else if (ctlr1.ButtonR2.pressing())
-    {
-      roller_set(-100);
-    }
-    else
-    {
-      roller_set(0);
-    }
+    rollerB_set(100);
+    rollerT_set(95);
+  }
+  else if (ctlr1.ButtonR2.pressing())
+  {
+    roller_set(-100);
   }
   else
   {
-    roller_set(80);
+    roller_set(0);
+  }
+}
+
+// A usercontrol functions
+void intake_control_a()
+{
+  if (ctlr1.ButtonR1.pressing())
+  {
+    intake_set(100);
+  }
+  else if (ctlr1.ButtonL1.pressing())
+  {
+    intake_set(-100);
+  }
+  else
+  {
+    intake_set(0);
+  }
+}
+
+void roller_control_a()
+{
+  if (ctlr1.ButtonR2.pressing())
+  {
+    roller_set(100);
+  }
+  else if (ctlr1.ButtonL2.pressing())
+  {
+    roller_set(-100);
+  }
+  else
+  {
+    roller_set(0);
   }
 }
