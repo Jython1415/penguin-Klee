@@ -10,9 +10,10 @@ float temp;
 float error;
 const float default_value = 40; 
 const float error_rate = 0.5;
-const float turn_error_rate = 0.55;
+const float turn_error_rate = 0.45;
 const float FB_error = 40;
 const float T_error = 70;
+const float rollerB_power = 10;
 
 void chassis_stop() {
   chassisLB.setBrake(vex::brakeType::brake);
@@ -56,26 +57,17 @@ void forward_ (float target, int intake) {
       chassisL_set(power);
       chassisR_set(power);
     }
-    switch(intake){
-      case 0:
-        intake_set(0);
-        rollerB_set(0);
-        break;
-      case 1:
-        intake_set(100);
-        rollerB_set(100);
-        break;
-      case 2:
-        intake_set(-100);
-        rollerB_set(-100);
-        break;
-    }
+    intake_set(100 * intake);
+    rollerB_set(100 * intake);
   }  
   chassis_stop();
   intakeL.stop();
   intakeR.stop();
   rollerT.stop();
   rollerB.stop();
+  task::sleep(100);
+  chassis_reset();
+  task::sleep(30);
 }
 
 void backward_ (float target, int intake) {
@@ -102,26 +94,17 @@ void backward_ (float target, int intake) {
       chassisL_set(-power);
       chassisR_set(-power);
     }
-    switch(intake){
-      case 0:
-        intake_set(0);
-        rollerB_set(0);
-        break;
-      case 1:
-        intake_set(100);
-        rollerB_set(100);
-        break;
-      case 2:
-        intake_set(-100);
-        rollerB_set(-100);
-        break;
-    }
+    intake_set(100 * intake);
+    rollerB_set(100 * intake);
   }  
   chassis_stop();
   intakeL.stop();
   intakeR.stop();
   rollerT.stop();
   rollerB.stop();
+  task::sleep(100);
+  chassis_reset();
+  task::sleep(30);
 }
 
 void turn_right (float target, int intake) {
@@ -148,26 +131,17 @@ void turn_right (float target, int intake) {
       chassisL_set(-power);
       chassisR_set(power);
     }
-    switch(intake){
-      case 0:
-        intake_set(0);
-        rollerB_set(0);
-        break;
-      case 1:
-        intake_set(100);
-        rollerB_set(100);
-        break;
-      case 2:
-        intake_set(-100);
-        rollerB_set(-100);
-        break;
-    }
+    intake_set(100 * intake);
+    rollerB_set(100 * intake);
   }  
   chassis_stop();
   intakeL.stop();
   intakeR.stop();
   rollerT.stop();
   rollerB.stop();
+  task::sleep(100);
+  chassis_reset();
+  task::sleep(30);
 }
 
 void turn_left (float target, int intake) {
@@ -194,26 +168,17 @@ void turn_left (float target, int intake) {
       chassisL_set(power);
       chassisR_set(-power);
     }
-    switch(intake){
-      case 0:
-        intake_set(0);
-        rollerB_set(0);
-        break;
-      case 1:
-        intake_set(100);
-        rollerB_set(100);
-        break;
-      case 2:
-        intake_set(-100);
-        rollerB_set(-100);
-        break;
-    }
+    intake_set(100 * intake);
+    rollerB_set(100 * intake);
   }  
   chassis_stop();
   intakeL.stop();
   intakeR.stop();
   rollerT.stop();
   rollerB.stop();
+  task::sleep(100);
+  chassis_reset();
+  task::sleep(30);
 }
 
 void cycle (int time, int power) {
@@ -233,8 +198,54 @@ void cycle (int time, int power) {
   intakeR.stop();
 }
 
-void route_1 () {
+void left_only (float target, int intake) {
+  int sign = target / std::abs(target); // sign changer
+  power = default_value;
+  while (std::abs(chassisLF.rotation(rotationUnits::raw)) < std::abs(target)) {
+    chassisL_set(std::abs(power) * sign);
+    intake_set(100 * intake);
+    rollerB_set(100 * intake);
+  }
+  chassis_stop();
+  intakeL.stop();
+  intakeR.stop();
+  rollerT.stop();
+  rollerB.stop();
+  task::sleep(100);
+  chassis_reset();
+  task::sleep(30);
+}
 
+void right_only (float target, int intake) {
+  int sign = target / std::abs(target); // sign changer
+  power = default_value;
+  while (std::abs(chassisRF.rotation(rotationUnits::raw)) < std::abs(target)) {
+    chassisR_set(std::abs(power) * sign);
+    chassisL_set(10);
+    intake_set(100 * intake);
+    rollerB_set(100 * intake);
+  }
+  chassis_stop();
+  intakeL.stop();
+  intakeR.stop();
+  rollerT.stop();
+  rollerB.stop();
+  task::sleep(100);
+  chassis_reset();
+  task::sleep(30);
+}
+
+void route_1 () {
+  cycle(400, 100);
+  forward_(1800, 1);
+  turn_right(455, 0);
+  chassis_reset();
+  forward_(2100, 1);
+  cycle(570, 100);
+  backward_(400, 0);
+  cycle(400, 40);
+  right_only(-1800, -1);
+  backward_(700, 0);
 }
 
 void debug () {
@@ -242,6 +253,6 @@ void debug () {
   chassis_reset();
   backward_(1000, 2);
   turn_right(1000, 0);
-  turn_left(1000, 1);
+  turn_left(600, 1);
   task::sleep(1000);
 }
