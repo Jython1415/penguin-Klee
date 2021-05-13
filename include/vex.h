@@ -14,7 +14,7 @@
 
 #include "robot-config.h"
 
-#define C_TEAM_BOT true
+//#define C_TEAM_BOT true
 
 #define waitUntil(condition)                                                   \
   do {                                                                         \

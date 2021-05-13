@@ -32,7 +32,7 @@ motor intakeR = motor(PORT16, true);
 motor intakeL = motor(PORT7, false);
 
 // positive is intake, negative is outtake
-motor rollerT = motor(PORT4, false);
+motor rollerT = motor(PORT4, true);
 motor rollerB = motor(PORT6, false);
 
 #endif
