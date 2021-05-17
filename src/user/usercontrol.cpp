@@ -82,7 +82,7 @@ void roller_control()
   if (ctlr1.ButtonR1.pressing())
   {
     rollerB_set(100);
-    rollerT_set(95);
+    rollerT_set(100);
   }
   else if (ctlr1.ButtonR2.pressing())
   {
@@ -115,7 +115,12 @@ void roller_control_a()
 {
   if (ctlr1.ButtonR2.pressing())
   {
-    roller_set(100);
+    if (Brain.Battery.current() > 85) {
+      roller_set(85);
+    }
+    else {
+      roller_set(100);
+    }
   }
   else if (ctlr1.ButtonL2.pressing())
   {

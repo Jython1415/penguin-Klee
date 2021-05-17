@@ -8,12 +8,11 @@ using namespace vex;
 float power;
 float temp;
 float error;
-const float default_value = 40; 
+float default_value = 50; 
 const float error_rate = 0.5;
 const float turn_error_rate = 0.45;
 const float FB_error = 40;
 const float T_error = 70;
-const float rollerB_power = 10;
 
 void chassis_stop() {
   chassisLB.setBrake(vex::brakeType::brake);
@@ -240,12 +239,21 @@ void route_1 () {
   forward_(1800, 1);
   turn_right(455, 0);
   chassis_reset();
-  forward_(2100, 1);
+  forward_(2300, 1);
   cycle(570, 100);
-  backward_(400, 0);
-  cycle(400, 40);
-  right_only(-1800, -1);
+  backward_(300, 0);
+  right_only(-2300, -1);
+  cycle(500, 80);
+  backward_(1100, 0);
+  //consistant till now
+  default_value = 60;
+  forward_(4800, 1);
+  default_value = 50;
+  turn_right(800, 1);
+  forward_(1200, 1);
+  cycle(500, 40);
   backward_(700, 0);
+  cycle(500, 100);
 }
 
 void debug () {
