@@ -32,7 +32,7 @@ void chassis_reset() {
   chassisRB.resetRotation();
 }
 
-void forward_ (float target, int intake) {
+void forward_ (float target, float intake) {
   target -= FB_error;
   power = default_value;
   while (chassisRF.rotation(rotationUnits::raw) < target && chassisLF.rotation(rotationUnits::raw) < target) {
@@ -69,7 +69,7 @@ void forward_ (float target, int intake) {
   task::sleep(30);
 }
 
-void backward_ (float target, int intake) {
+void backward_ (float target, float intake) {
   target = std::abs(target) - std::abs(FB_error);
   power = default_value;
   while (std::abs(chassisRF.rotation(rotationUnits::raw)) < std::abs(target) && std::abs(chassisLF.rotation(rotationUnits::raw)) < std::abs(target)) {
@@ -106,7 +106,7 @@ void backward_ (float target, int intake) {
   task::sleep(30);
 }
 
-void turn_right (float target, int intake) {
+void turn_right (float target, float intake) {
   target = std::abs(target) - std::abs(T_error);
   power = default_value;
   while (std::abs(chassisRF.rotation(rotationUnits::raw)) < std::abs(target) && std::abs(chassisLF.rotation(rotationUnits::raw)) < std::abs(target)) {
@@ -143,7 +143,7 @@ void turn_right (float target, int intake) {
   task::sleep(30);
 }
 
-void turn_left (float target, int intake) {
+void turn_left (float target, float intake) {
   target = std::abs(target) - std::abs(T_error);
   power = default_value;
   while (std::abs(chassisRF.rotation(rotationUnits::raw)) < std::abs(target) && std::abs(chassisLF.rotation(rotationUnits::raw)) < std::abs(target)) {
@@ -197,7 +197,7 @@ void cycle (int time, int power) {
   intakeR.stop();
 }
 
-void left_only (float target, int intake) {
+void left_only (float target, float intake) {
   int sign = target / std::abs(target); // sign changer
   power = default_value;
   while (std::abs(chassisLF.rotation(rotationUnits::raw)) < std::abs(target)) {
@@ -215,7 +215,7 @@ void left_only (float target, int intake) {
   task::sleep(30);
 }
 
-void right_only (float target, int intake) {
+void right_only (float target, float intake) {
   int sign = target / std::abs(target); // sign changer
   power = default_value;
   while (std::abs(chassisRF.rotation(rotationUnits::raw)) < std::abs(target)) {
@@ -238,22 +238,36 @@ void route_1 () {
   cycle(400, 100);
   forward_(1800, 1);
   turn_right(455, 0);
-  chassis_reset();
   forward_(2300, 1);
-  cycle(570, 100);
-  backward_(300, 0);
-  right_only(-2300, -1);
-  cycle(500, 80);
+  task::sleep(100);
+  cycle(300, -50);
+  task::sleep(100);
+  cycle(525, 100);
+  backward_(450, 0);
+  right_only(-2300, 0);
+  cycle(700, -80);
   backward_(1100, 0);
-  //consistant till now
-  default_value = 60;
-  forward_(4800, 1);
-  default_value = 50;
+  //consistant till here
+  default_value = 55;
+  forward_(4700, 1);
+  default_value = 40;
+  task::sleep(100);
   turn_right(800, 1);
-  forward_(1200, 1);
-  cycle(500, 40);
-  backward_(700, 0);
+  task::sleep(100);
+  forward_(700, 1);
+  task::sleep(100);
+  cycle(200, -50);
+  task::sleep(100);
   cycle(500, 100);
+  default_value = 50;
+  backward_(1300, 0);
+  task::sleep(100);
+  turn_left(830, 0);
+  task::sleep(200);
+  forward_(4000, 0.2);
+  task::sleep(100);
+  backward_(1000, 0);
+  turn_right(400, 0);
 }
 
 void debug () {
