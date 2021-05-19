@@ -9,10 +9,10 @@ float power;
 float temp;
 float error;
 float default_value = 50; 
-const float error_rate = 0.5;
-const float turn_error_rate = 0.45;
-const float FB_error = 40;
-const float T_error = 70;
+float error_rate = 0.5;
+float turn_error_rate = 0.45;
+float FB_error = 40;
+float T_error = 70;
 
 void chassis_stop() {
   chassisLB.setBrake(vex::brakeType::brake);
@@ -234,8 +234,10 @@ void right_only (float target, float intake) {
   task::sleep(30);
 }
 
-void route_1 () {
+void route_C () {
+  // pre-load shoot
   cycle(400, 100);
+  // first goal
   forward_(1800, 1);
   turn_right(455, 0);
   forward_(2300, 1);
@@ -244,10 +246,10 @@ void route_1 () {
   task::sleep(100);
   cycle(525, 100);
   backward_(450, 0);
-  right_only(-2300, 0);
+  // second goal
+  right_only(-2300, 0); 
   cycle(700, -80);
-  backward_(1100, 0);
-  //consistant till here
+  backward_(1100, 0); // line up by wall
   default_value = 55;
   forward_(4700, 1);
   default_value = 40;
@@ -260,21 +262,36 @@ void route_1 () {
   task::sleep(100);
   cycle(500, 100);
   default_value = 50;
-  backward_(1300, 0);
+  backward_(1350, 0);
+  // prep for third goal
   task::sleep(100);
   turn_left(830, 0);
   task::sleep(200);
+  // third goal
   forward_(4000, 0.2);
   task::sleep(100);
-  backward_(1000, 0);
+  backward_(1200, 0.5); 
+  cycle(400, 50);
   turn_right(400, 0);
+  forward_(2300, 1);
+  task::sleep(100);
+  cycle(400, -50);
+  task::sleep(100);
+  cycle(525, 100);
+  backward_(1000, -1);
+  // fourth goal
+  turn_left(500, -1);
+  backward_(1000, -1);
+
+}
+
+void route_A () {
+  cycle(1000, 100);
+  forward_(1800, 1);
+  turn_right(500, 1);
+  forward_(1755,1);
 }
 
 void debug () {
   forward_(1000, 1);
-  chassis_reset();
-  backward_(1000, 2);
-  turn_right(1000, 0);
-  turn_left(600, 1);
-  task::sleep(1000);
 }
